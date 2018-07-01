@@ -22,12 +22,7 @@ char *hostname_to_ip(const char *hostname)
 	}
 	addr_list = (struct in_addr **) host->h_addr_list;
 
-	for(i = 0; addr_list[i] != NULL; i++) 
-	{
-		return (char *)inet_ntoa(*addr_list[i]);
-	}
-
-	return NULL;
+	return (char *)inet_ntoa(*addr_list[i]);
 }
 
 int scan_ports(const char *hostname, int start, int end)
