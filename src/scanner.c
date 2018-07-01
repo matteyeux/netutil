@@ -14,7 +14,6 @@ char *hostname_to_ip(const char *hostname)
 {
 	struct hostent *host;
 	struct in_addr **addr_list;
-	int i;
 	if ((host = gethostbyname(hostname)) == NULL)
 	{
 		herror("gethostbyname");
@@ -22,7 +21,7 @@ char *hostname_to_ip(const char *hostname)
 	}
 	addr_list = (struct in_addr **) host->h_addr_list;
 
-	return (char *)inet_ntoa(*addr_list[i]);
+	return (char *)inet_ntoa(*addr_list[0]);
 }
 
 int scan_ports(const char *hostname, int start, int end)
