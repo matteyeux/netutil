@@ -16,11 +16,12 @@ void usage(char const *name){
 	fprintf(stdout, "usage : %s [arg]\n", name);
 	fprintf(stdout, "-s, --snif <number of packets>\t\t\t snif network packets\n");
 	fprintf(stdout, "-p, --port <host> <start port> <end port>\t scan ports\n");
+	fprintf(stdout, "-i, --interface <interface>\t\t specify network interface\n");
 	fprintf(stdout, "-h, --help \t\t\t\t\t print this help\n");
 }
 
 int main(int argc, char const *argv[]){
-	bool snif = false, port = false;
+	bool snif = false, port = false, iface = false;
 	int result;
 	int pkt_number = 0;
 	int snapshot_length = 1024;
@@ -43,7 +44,11 @@ int main(int argc, char const *argv[]){
 			snif = true;
 		} else if (!strcmp(argv[i], "-p") || !strcmp(argv[i], "--port")){
 			port = true;
-		} else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")){
+		} else if (!strcmp(argv[i], "-i") || !strcmp(argv[i], "--interface")){
+			iface = true;
+			device = (char *)argv[i + 1];
+		}
+		else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")){
 			usage(argv[0]);
 			return 0;
 		}
@@ -51,8 +56,10 @@ int main(int argc, char const *argv[]){
 
 	if (snif){
 		int uid = getuid();
-		device = get_iface();
-		fprintf(stdout, "[i] interface : %s\n", get_iface());
+		if (!iface){
+			device = get_iface();
+		}
+		fprintf(stdout, "[i] interface : %s\n", device);
 
 		if (uid != 0){
 			fprintf(stdout, "[-] please, run this tool as root\n[i] UID : %d\n", uid);
